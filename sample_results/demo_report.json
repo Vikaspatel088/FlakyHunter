@@ -1,0 +1,286 @@
+{
+  "schema_version": "1.0.0",
+  "flakyhunter_version": "0.1.0",
+  "python_version": "3.12.14",
+  "pytest_version": "9.1.1",
+  "target_path": "C:\\_OTHER STUFF\\5 SEM\\GITHUB\\FlakyHunter\\demo\\flaky_demo",
+  "seed": 7777,
+  "requested_runs": 15,
+  "actual_runs": 15,
+  "run_orders": [
+    [
+      "demo/flaky_demo/test_random.py::test_flaky_random",
+      "demo/flaky_demo/test_user_login.py::test_user_login",
+      "demo/flaky_demo/test_cart_total.py::test_cart_total",
+      "demo/flaky_demo/test_time.py::test_time_deadline",
+      "demo/flaky_demo/test_network.py::test_flaky_network"
+    ],
+    [
+      "demo/flaky_demo/test_cart_total.py::test_cart_total",
+      "demo/flaky_demo/test_time.py::test_time_deadline",
+      "demo/flaky_demo/test_user_login.py::test_user_login",
+      "demo/flaky_demo/test_network.py::test_flaky_network",
+      "demo/flaky_demo/test_random.py::test_flaky_random"
+    ],
+    [
+      "demo/flaky_demo/test_time.py::test_time_deadline",
+      "demo/flaky_demo/test_network.py::test_flaky_network",
+      "demo/flaky_demo/test_user_login.py::test_user_login",
+      "demo/flaky_demo/test_random.py::test_flaky_random",
+      "demo/flaky_demo/test_cart_total.py::test_cart_total"
+    ],
+    [
+      "demo/flaky_demo/test_random.py::test_flaky_random",
+      "demo/flaky_demo/test_network.py::test_flaky_network",
+      "demo/flaky_demo/test_user_login.py::test_user_login",
+      "demo/flaky_demo/test_time.py::test_time_deadline",
+      "demo/flaky_demo/test_cart_total.py::test_cart_total"
+    ],
+    [
+      "demo/flaky_demo/test_random.py::test_flaky_random",
+      "demo/flaky_demo/test_user_login.py::test_user_login",
+      "demo/flaky_demo/test_network.py::test_flaky_network",
+      "demo/flaky_demo/test_time.py::test_time_deadline",
+      "demo/flaky_demo/test_cart_total.py::test_cart_total"
+    ],
+    [
+      "demo/flaky_demo/test_network.py::test_flaky_network",
+      "demo/flaky_demo/test_random.py::test_flaky_random",
+      "demo/flaky_demo/test_time.py::test_time_deadline",
+      "demo/flaky_demo/test_cart_total.py::test_cart_total",
+      "demo/flaky_demo/test_user_login.py::test_user_login"
+    ],
+    [
+      "demo/flaky_demo/test_user_login.py::test_user_login",
+      "demo/flaky_demo/test_cart_total.py::test_cart_total",
+      "demo/flaky_demo/test_network.py::test_flaky_network",
+      "demo/flaky_demo/test_time.py::test_time_deadline",
+      "demo/flaky_demo/test_random.py::test_flaky_random"
+    ],
+    [
+      "demo/flaky_demo/test_random.py::test_flaky_random",
+      "demo/flaky_demo/test_network.py::test_flaky_network",
+      "demo/flaky_demo/test_cart_total.py::test_cart_total",
+      "demo/flaky_demo/test_user_login.py::test_user_login",
+      "demo/flaky_demo/test_time.py::test_time_deadline"
+    ],
+    [
+      "demo/flaky_demo/test_time.py::test_time_deadline",
+      "demo/flaky_demo/test_network.py::test_flaky_network",
+      "demo/flaky_demo/test_user_login.py::test_user_login",
+      "demo/flaky_demo/test_cart_total.py::test_cart_total",
+      "demo/flaky_demo/test_random.py::test_flaky_random"
+    ],
+    [
+      "demo/flaky_demo/test_user_login.py::test_user_login",
+      "demo/flaky_demo/test_random.py::test_flaky_random",
+      "demo/flaky_demo/test_time.py::test_time_deadline",
+      "demo/flaky_demo/test_cart_total.py::test_cart_total",
+      "demo/flaky_demo/test_network.py::test_flaky_network"
+    ],
+    [
+      "demo/flaky_demo/test_random.py::test_flaky_random",
+      "demo/flaky_demo/test_user_login.py::test_user_login",
+      "demo/flaky_demo/test_cart_total.py::test_cart_total",
+      "demo/flaky_demo/test_time.py::test_time_deadline",
+      "demo/flaky_demo/test_network.py::test_flaky_network"
+    ],
+    [
+      "demo/flaky_demo/test_user_login.py::test_user_login",
+      "demo/flaky_demo/test_time.py::test_time_deadline",
+      "demo/flaky_demo/test_random.py::test_flaky_random",
+      "demo/flaky_demo/test_cart_total.py::test_cart_total",
+      "demo/flaky_demo/test_network.py::test_flaky_network"
+    ],
+    [
+      "demo/flaky_demo/test_user_login.py::test_user_login",
+      "demo/flaky_demo/test_network.py::test_flaky_network",
+      "demo/flaky_demo/test_random.py::test_flaky_random",
+      "demo/flaky_demo/test_time.py::test_time_deadline",
+      "demo/flaky_demo/test_cart_total.py::test_cart_total"
+    ],
+    [
+      "demo/flaky_demo/test_network.py::test_flaky_network",
+      "demo/flaky_demo/test_time.py::test_time_deadline",
+      "demo/flaky_demo/test_random.py::test_flaky_random",
+      "demo/flaky_demo/test_cart_total.py::test_cart_total",
+      "demo/flaky_demo/test_user_login.py::test_user_login"
+    ],
+    [
+      "demo/flaky_demo/test_cart_total.py::test_cart_total",
+      "demo/flaky_demo/test_user_login.py::test_user_login",
+      "demo/flaky_demo/test_random.py::test_flaky_random",
+      "demo/flaky_demo/test_time.py::test_time_deadline",
+      "demo/flaky_demo/test_network.py::test_flaky_network"
+    ]
+  ],
+  "tests": {
+    "demo/flaky_demo/test_cart_total.py::test_cart_total": {
+      "node_id": "demo/flaky_demo/test_cart_total.py::test_cart_total",
+      "eligible_runs": 15,
+      "passes": 5,
+      "failures": 10,
+      "skips": 0,
+      "inconclusive": 0,
+      "failure_probability": 0.6667,
+      "confidence_interval": {
+        "lower": 0.4171,
+        "upper": 0.8482,
+        "confidence_level": 0.95
+      },
+      "is_flaky": true,
+      "cause": {
+        "category": "shared state",
+        "confidence": 0.95,
+        "evidence": [
+          "Verified polluter test set identified via ddmin: [demo/flaky_demo/test_user_login.py::test_user_login]"
+        ]
+      },
+      "polluter_investigation": {
+        "victim_node_id": "demo/flaky_demo/test_cart_total.py::test_cart_total",
+        "baseline_outcome": "passed",
+        "reproduction_outcome": "failed",
+        "original_candidate_set": [
+          "demo/flaky_demo/test_random.py::test_flaky_random",
+          "demo/flaky_demo/test_user_login.py::test_user_login"
+        ],
+        "minimized_polluter_set": [
+          "demo/flaky_demo/test_user_login.py::test_user_login"
+        ],
+        "execution_count": 8,
+        "budget_exhausted": false,
+        "verified": true,
+        "status": "reproduced_and_minimized",
+        "message": "Successfully isolated minimal polluter set of size 1"
+      }
+    },
+    "demo/flaky_demo/test_network.py::test_flaky_network": {
+      "node_id": "demo/flaky_demo/test_network.py::test_flaky_network",
+      "eligible_runs": 15,
+      "passes": 8,
+      "failures": 7,
+      "skips": 0,
+      "inconclusive": 0,
+      "failure_probability": 0.4667,
+      "confidence_interval": {
+        "lower": 0.2481,
+        "upper": 0.6988,
+        "confidence_level": 0.95
+      },
+      "is_flaky": true,
+      "cause": {
+        "category": "network",
+        "confidence": 0.7,
+        "evidence": [
+          "Calls network-related function 'get'",
+          "Failure message indicates network/socket issue: 'C:\\_OTHER STUFF\\5 SEM\\GITHUB\\FlakyHunter\\demo\\flaky_demo\\test_network.py:27: httpx.ConnectTimeout: C'"
+        ]
+      },
+      "polluter_investigation": {
+        "victim_node_id": "demo/flaky_demo/test_network.py::test_flaky_network",
+        "baseline_outcome": "failed",
+        "reproduction_outcome": "failed",
+        "original_candidate_set": [
+          "demo/flaky_demo/test_cart_total.py::test_cart_total",
+          "demo/flaky_demo/test_time.py::test_time_deadline",
+          "demo/flaky_demo/test_user_login.py::test_user_login"
+        ],
+        "minimized_polluter_set": [],
+        "execution_count": 1,
+        "budget_exhausted": false,
+        "verified": false,
+        "status": "baseline_failed",
+        "message": "Victim test failed in isolation. Failure is not order-dependent."
+      }
+    },
+    "demo/flaky_demo/test_random.py::test_flaky_random": {
+      "node_id": "demo/flaky_demo/test_random.py::test_flaky_random",
+      "eligible_runs": 15,
+      "passes": 10,
+      "failures": 5,
+      "skips": 0,
+      "inconclusive": 0,
+      "failure_probability": 0.3333,
+      "confidence_interval": {
+        "lower": 0.1518,
+        "upper": 0.5829,
+        "confidence_level": 0.95
+      },
+      "is_flaky": true,
+      "cause": {
+        "category": "randomness",
+        "confidence": 0.55,
+        "evidence": [
+          "Calls stochastic function 'random'"
+        ]
+      },
+      "polluter_investigation": {
+        "victim_node_id": "demo/flaky_demo/test_random.py::test_flaky_random",
+        "baseline_outcome": "failed",
+        "reproduction_outcome": "failed",
+        "original_candidate_set": [
+          "demo/flaky_demo/test_time.py::test_time_deadline",
+          "demo/flaky_demo/test_network.py::test_flaky_network",
+          "demo/flaky_demo/test_user_login.py::test_user_login"
+        ],
+        "minimized_polluter_set": [],
+        "execution_count": 1,
+        "budget_exhausted": false,
+        "verified": false,
+        "status": "baseline_failed",
+        "message": "Victim test failed in isolation. Failure is not order-dependent."
+      }
+    },
+    "demo/flaky_demo/test_time.py::test_time_deadline": {
+      "node_id": "demo/flaky_demo/test_time.py::test_time_deadline",
+      "eligible_runs": 15,
+      "passes": 15,
+      "failures": 0,
+      "skips": 0,
+      "inconclusive": 0,
+      "failure_probability": 0.0,
+      "confidence_interval": {
+        "lower": 0.0,
+        "upper": 0.2039,
+        "confidence_level": 0.95
+      },
+      "is_flaky": false,
+      "cause": {
+        "category": "time",
+        "confidence": 0.7,
+        "evidence": [
+          "References timeout attribute 'is_within_deadline'",
+          "References timeout attribute 'deadline_ms'"
+        ]
+      },
+      "polluter_investigation": null
+    },
+    "demo/flaky_demo/test_user_login.py::test_user_login": {
+      "node_id": "demo/flaky_demo/test_user_login.py::test_user_login",
+      "eligible_runs": 15,
+      "passes": 15,
+      "failures": 0,
+      "skips": 0,
+      "inconclusive": 0,
+      "failure_probability": 0.0,
+      "confidence_interval": {
+        "lower": 0.0,
+        "upper": 0.2039,
+        "confidence_level": 0.95
+      },
+      "is_flaky": false,
+      "cause": {
+        "category": "unknown",
+        "confidence": 0.0,
+        "evidence": [
+          "No static AST or runtime error patterns matched."
+        ]
+      },
+      "polluter_investigation": null
+    }
+  },
+  "total_test_executions": 75,
+  "investigation_execution_count": 10,
+  "created_at": "2026-10-25T07:10:09.090459+00:00",
+  "metadata": {}
+}

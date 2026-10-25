@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlakyHunter Report &mdash; {{ report_id }}</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --border-hover: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --purple: #7c3aed;
+      --purple-light: #f5f3ff;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 2.5rem 1.5rem;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1200px; margin: 0 auto; }
+    
+    header {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    .back-link {
+      color: var(--primary);
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      margin-bottom: 0.5rem;
+    }
+    .back-link:hover { text-decoration: underline; }
+    
+    h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+    .report-meta {
+      color: var(--text-muted);
+      font-size: 0.875rem;
+      margin-top: 0.35rem;
+    }
+
+    /* WOW Banner */
+    .wow-banner {
+      background: #faf5ff;
+      border: 1px solid #d8b4fe;
+      border-left: 4px solid var(--purple);
+      border-radius: 0.5rem;
+      padding: 1.25rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    .wow-banner h3 {
+      color: #6b21a8;
+      font-size: 0.95rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 0.4rem;
+    }
+    .wow-banner p {
+      font-family: var(--font-mono);
+      font-size: 0.925rem;
+      color: #581c87;
+      line-height: 1.6;
+    }
+
+    /* Metrics Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+    .stat-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 0.5rem;
+      padding: 1.25rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    }
+    .stat-card .label {
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+    }
+    .stat-card .value {
+      font-size: 1.65rem;
+      font-weight: 700;
+      color: var(--text);
+      margin-top: 0.25rem;
+      letter-spacing: -0.02em;
+    }
+    .stat-card .subtext {
+      font-size: 0.775rem;
+      color: var(--text-muted);
+      margin-top: 0.25rem;
+    }
+
+    /* Main Table Card */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 0.625rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+    .card h2 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .table-container { overflow-x: auto; border: 1px solid var(--border); border-radius: 0.375rem; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th {
+      background: #f8fafc;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 0.875rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.875rem;
+      vertical-align: top;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #fafafa; }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .badge-flaky { background: var(--danger-light); color: var(--danger); border: 1px solid #fecaca; }
+    .badge-stable { background: var(--success-light); color: var(--success); border: 1px solid #a7f3d0; }
+    .badge-sample { background: var(--purple-light); color: var(--purple); border: 1px solid #ddd6fe; }
+    
+    .badge-cause-time { background: var(--warning-light); color: var(--warning); border: 1px solid #fde68a; }
+    .badge-cause-random { background: var(--purple-light); color: var(--purple); border: 1px solid #ddd6fe; }
+    .badge-cause-network { background: var(--primary-light); color: var(--primary); border: 1px solid #bfdbfe; }
+    .badge-cause-shared { background: #fdf2f8; color: #db2777; border: 1px solid #fbcfe8; }
+    .badge-cause-unknown { background: #f1f5f9; color: #64748b; border: 1px solid #cbd5e1; }
+
+    .evidence-list {
+      margin-top: 0.5rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      padding-left: 1.25rem;
+    }
+    .evidence-list li { margin-bottom: 0.2rem; }
+
+    .investigation-box {
+      margin-top: 0.75rem;
+      background: #f8fafc;
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--primary);
+      border-radius: 0.375rem;
+      padding: 0.75rem;
+      font-size: 0.8rem;
+    }
+    .investigation-box strong { color: var(--text); }
+    .investigation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 0.5rem;
+      margin-top: 0.4rem;
+    }
+
+    .code-pill {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      padding: 0.15rem 0.4rem;
+      border-radius: 0.25rem;
+      color: #334155;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 3rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <a href="/" class="back-link">&larr; Back to Diagnostic Reports</a>
+        <h1>
+          Report: <code class="code-pill">{{ report_id }}</code>
+          {% if is_sample %}
+          <span class="badge badge-sample" style="font-size: 0.75rem;">Precomputed Sample Report</span>
+          {% endif %}
+        </h1>
+        <p class="report-meta">
+          Target: <strong>{{ report.target_path }}</strong> &bull;
+          Master Seed: <code class="code-pill">{{ report.seed }}</code> &bull;
+          FlakyHunter v{{ report.flakyhunter_version }} &bull;
+          Python {{ report.python_version }}
+        </p>
+      </div>
+      <div>
+        <a href="/api/reports/{{ report_id }}" class="btn" style="display: inline-block; background: #ffffff; color: var(--text); border: 1px solid var(--border); font-size: 0.8rem; padding: 0.4rem 0.8rem; border-radius: 0.375rem; text-decoration: none;" download="{{ report_id }}.json">
+          &darr; Export JSON
+        </a>
+      </div>
+    </header>
+
+    {% if wow_lines %}
+    <div class="wow-banner">
+      <h3>Verified Order-Dependent Failure Diagnosis</h3>
+      {% for line in wow_lines %}
+      <p>&gt;&gt;&gt; {{ line }}</p>
+      {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="label">Total Tests Analyzed</div>
+        <div class="value">{{ report.tests|length }}</div>
+        <div class="subtext">From pytest collection</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Flaky Tests Identified</div>
+        <div class="value" style="color: {% if flaky_count > 0 %}#dc2626{% else %}#059669{% endif %};">
+          {{ flaky_count }} / {{ report.tests|length }}
+        </div>
+        <div class="subtext">Passed and failed across runs</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Shuffled Suite Runs</div>
+        <div class="value">{{ report.actual_runs }} / {{ report.requested_runs }}</div>
+        <div class="subtext">Deterministic seeded orders</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Total Test Executions</div>
+        <div class="value">{{ report.total_test_executions }}</div>
+        <div class="subtext">Subprocess-isolated runs</div>
+      </div>
+      <div class="stat-card">
+        <div class="label">Polluter Investigation Execs</div>
+        <div class="value">{{ report.investigation_execution_count }}</div>
+        <div class="subtext">ddmin delta debugging calls</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Per-Test Statistical Diagnosis</h2>
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Test Node ID</th>
+              <th>Observed Outcomes</th>
+              <th>P(Failure)</th>
+              <th>95% Wilson CI</th>
+              <th>Flake Status</th>
+              <th>Root Cause Classification & Evidence</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for nid, test in report.tests.items() %}
+            <tr>
+              <td>
+                <strong style="color: var(--text);">{{ nid.split("::")[-1] }}</strong><br>
+                <span style="font-size: 0.75rem; color: var(--text-muted); font-family: var(--font-mono);">{{ nid }}</span>
+              </td>
+              <td>
+                <span style="color: #059669; font-weight: 600;">{{ test.passes }}P</span> &bull;
+                <span style="color: #dc2626; font-weight: 600;">{{ test.failures }}F</span> &bull;
+                <span style="color: #64748b;">{{ test.skips }}S</span>
+                <div style="font-size: 0.75rem; color: var(--text-muted);">{{ test.eligible_runs }} eligible runs</div>
+              </td>
+              <td>
+                <strong style="font-size: 0.95rem; font-family: var(--font-mono);">{{ test.failure_probability }}</strong>
+              </td>
+              <td>
+                <span class="code-pill">[{{ test.confidence_interval.lower }}, {{ test.confidence_interval.upper }}]</span>
+              </td>
+              <td>
+                {% if test.is_flaky %}
+                <span class="badge badge-flaky">FLAKY</span>
+                {% else %}
+                <span class="badge badge-stable">STABLE</span>
+                {% endif %}
+              </td>
+              <td>
+                {% if test.is_flaky %}
+                  {% if test.cause.category == "time" %}
+                    <span class="badge badge-cause-time">time (conf: {{ test.cause.confidence }})</span>
+                  {% elif test.cause.category == "randomness" %}
+                    <span class="badge badge-cause-random">randomness (conf: {{ test.cause.confidence }})</span>
+                  {% elif test.cause.category == "network" %}
+                    <span class="badge badge-cause-network">network (conf: {{ test.cause.confidence }})</span>
+                  {% elif test.cause.category == "shared state" %}
+                    <span class="badge badge-cause-shared">shared state (conf: {{ test.cause.confidence }})</span>
+                  {% else %}
+                    <span class="badge badge-cause-unknown">unknown</span>
+                  {% endif %}
+
+                  {% if test.cause.evidence %}
+                  <ul class="evidence-list">
+                    {% for ev in test.cause.evidence %}
+                    <li>{{ ev }}</li>
+                    {% endfor %}
+                  </ul>
+                  {% endif %}
+
+                  {% if test.polluter_investigation %}
+                  <div class="investigation-box">
+                    <strong>Delta Debugging (ddmin) Investigation:</strong>
+                    <div class="investigation-grid">
+                      <div>Status: <code class="code-pill">{{ test.polluter_investigation.status }}</code></div>
+                      <div>Verified: <strong>{{ test.polluter_investigation.verified }}</strong></div>
+                      <div>Subprocess Execs: <strong>{{ test.polluter_investigation.execution_count }}</strong></div>
+                      <div>Baseline Outcome: <code class="code-pill">{{ test.polluter_investigation.baseline_outcome.value }}</code></div>
+                    </div>
+                    {% if test.polluter_investigation.minimized_polluter_set %}
+                    <div style="margin-top: 0.4rem;">
+                      Minimal Polluter Set:
+                      {% for p in test.polluter_investigation.minimized_polluter_set %}
+                      <code class="code-pill" style="color: #7c3aed; font-weight: 600;">{{ p }}</code>
+                      {% endfor %}
+                    </div>
+                    {% endif %}
+                    <div style="margin-top: 0.25rem; font-size: 0.775rem; color: var(--text-muted);">
+                      {{ test.polluter_investigation.message }}
+                    </div>
+                  </div>
+                  {% endif %}
+                {% else %}
+                  <span style="color: var(--text-muted); font-size: 0.85rem;">All eligible executions yielded identical outcome</span>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <footer>
+      FlakyHunter &mdash; Recruiter-Quality Testing Infrastructure &bull; MIT License &bull; Vikas Kumar Patel
+    </footer>
+  </div>
+</body>
+</html>

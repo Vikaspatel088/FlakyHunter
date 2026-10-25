@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: flakyhunter
+    env: python
+    plan: free
+    buildCommand: "pip install setuptools wheel && pip install -e . --no-build-isolation"
+    startCommand: "python -c \"import os; port=os.environ.get('PORT','8000'); from flakyhunter.web import create_app; import uvicorn; app=create_app(reports_dir='sample_results'); uvicorn.run(app, host='0.0.0.0', port=int(port))\""
+    healthCheckPath: /health
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.0
+      - key: FLAKYHUNTER_REPORTS_DIR
+        value: sample_results

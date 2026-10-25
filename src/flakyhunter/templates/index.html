@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FlakyHunter - Test Flakiness & Polluter Isolation Dashboard</title>
+  <style>
+    :root {
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --border: #e2e8f0;
+      --border-hover: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --text-subtle: #94a3b8;
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-light: #eff6ff;
+      --danger: #dc2626;
+      --danger-light: #fef2f2;
+      --warning: #d97706;
+      --warning-light: #fffbeb;
+      --success: #059669;
+      --success-light: #ecfdf5;
+      --purple: #7c3aed;
+      --purple-light: #f5f3ff;
+      --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      padding: 2.5rem 1.5rem;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 1140px; margin: 0 auto; }
+    
+    header {
+      margin-bottom: 2rem;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+    }
+    .logo-area h1 {
+      font-size: 1.625rem;
+      font-weight: 700;
+      letter-spacing: -0.025em;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 0.625rem;
+    }
+    .logo-area p {
+      color: var(--text-muted);
+      font-size: 0.925rem;
+      margin-top: 0.25rem;
+    }
+    .badge-ver {
+      background: var(--primary-light);
+      border: 1px solid #bfdbfe;
+      padding: 0.2rem 0.55rem;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--primary);
+      font-family: var(--font-mono);
+    }
+    .header-actions { display: flex; gap: 0.75rem; align-items: center; }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 0.625rem;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    }
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.25rem;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+    .card h2 {
+      font-size: 1.15rem;
+      font-weight: 600;
+      color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    .card-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      margin-top: -0.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      background: var(--primary);
+      color: white;
+      font-weight: 500;
+      padding: 0.55rem 1.1rem;
+      border-radius: 0.375rem;
+      text-decoration: none;
+      border: 1px solid transparent;
+      cursor: pointer;
+      font-size: 0.875rem;
+      transition: all 0.15s ease-in-out;
+    }
+    .btn:hover { background: var(--primary-hover); }
+    .btn-secondary {
+      background: #ffffff;
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover { background: #f1f5f9; border-color: var(--border-hover); }
+    .btn-sm { padding: 0.35rem 0.75rem; font-size: 0.8rem; }
+
+    /* Tables */
+    .table-container { overflow-x: auto; border: 1px solid var(--border); border-radius: 0.375rem; }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th {
+      background: #f8fafc;
+      padding: 0.75rem 1rem;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      font-weight: 600;
+      border-bottom: 1px solid var(--border);
+    }
+    td {
+      padding: 0.875rem 1rem;
+      border-bottom: 1px solid var(--border);
+      font-size: 0.875rem;
+      vertical-align: middle;
+    }
+    tr:last-child td { border-bottom: none; }
+    tr:hover td { background: #f8fafc; }
+
+    /* Badges */
+    .badge {
+      display: inline-block;
+      padding: 0.2rem 0.55rem;
+      border-radius: 0.25rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .badge-sample {
+      background: var(--purple-light);
+      color: var(--purple);
+      border: 1px solid #ddd6fe;
+    }
+    .badge-uploaded {
+      background: var(--primary-light);
+      color: var(--primary);
+      border: 1px solid #bfdbfe;
+    }
+    .badge-flaky {
+      background: var(--danger-light);
+      color: var(--danger);
+      border: 1px solid #fecaca;
+    }
+    .badge-clean {
+      background: var(--success-light);
+      color: var(--success);
+      border: 1px solid #a7f3d0;
+    }
+
+    /* Alerts */
+    .alert {
+      padding: 1rem 1.25rem;
+      border-radius: 0.375rem;
+      margin-bottom: 1.5rem;
+      font-size: 0.875rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 1rem;
+    }
+    .alert-success {
+      background: var(--success-light);
+      border: 1px solid #a7f3d0;
+      color: #065f46;
+    }
+    .alert-error {
+      background: var(--danger-light);
+      border: 1px solid #fecaca;
+      color: #991b1b;
+    }
+    .alert-info {
+      background: var(--primary-light);
+      border: 1px solid #bfdbfe;
+      color: #1e40af;
+    }
+
+    /* Upload Zone */
+    .upload-zone {
+      border: 2px dashed #cbd5e1;
+      border-radius: 0.5rem;
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      background: #fafafa;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+    .upload-zone:hover, .upload-zone.dragover {
+      border-color: var(--primary);
+      background: var(--primary-light);
+    }
+    .upload-zone input[type="file"] { display: none; }
+    .upload-zone-text {
+      font-size: 0.95rem;
+      color: var(--text);
+      font-weight: 500;
+      margin-bottom: 0.35rem;
+    }
+    .upload-zone-subtext {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+    .file-selected-info {
+      margin-top: 1rem;
+      font-family: var(--font-mono);
+      font-size: 0.85rem;
+      color: var(--primary);
+      display: none;
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 3.5rem 1.5rem;
+      color: var(--text-muted);
+    }
+    .code-pill {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      background: #f1f5f9;
+      border: 1px solid var(--border);
+      padding: 0.15rem 0.4rem;
+      border-radius: 0.25rem;
+      color: #334155;
+    }
+    footer {
+      text-align: center;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      margin-top: 3rem;
+      border-top: 1px solid var(--border);
+      padding-top: 1.5rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo-area">
+        <h1>FlakyHunter <span class="badge-ver">v{{ version }}</span></h1>
+        <p>Testing Observability — Flakiness Probability & Delta Debugging Polluter Isolation</p>
+      </div>
+      <div class="header-actions">
+        <a href="#upload-section" class="btn">+ Upload Report JSON</a>
+      </div>
+    </header>
+
+    <!-- Feedback messages -->
+    <div id="dynamic-alert" style="display: none;"></div>
+
+    {% if error %}
+    <div class="alert alert-error">
+      <div><strong>Validation Error:</strong> {{ error }}</div>
+    </div>
+    {% endif %}
+
+    {% if success_id %}
+    <div class="alert alert-success">
+      <div><strong>Success:</strong> Report <code>{{ success_id }}</code> uploaded and verified. <a href="/reports/{{ success_id }}" style="color: #065f46; font-weight: 600; margin-left: 0.5rem;">View Report &rarr;</a></div>
+    </div>
+    {% endif %}
+
+    <div class="card">
+      <div class="card-header">
+        <div>
+          <h2>Diagnostic Reports</h2>
+          <p class="card-subtitle">Verified test execution audits stored in local directory</p>
+        </div>
+      </div>
+
+      {% if reports %}
+      <div class="table-container">
+        <table id="reports-table">
+          <thead>
+            <tr>
+              <th>Report Identifier</th>
+              <th>Type</th>
+              <th>Target Path</th>
+              <th>Runs</th>
+              <th>Flaky Tests</th>
+              <th>Test Executions</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for r in reports %}
+            <tr>
+              <td>
+                <a href="/reports/{{ r.id }}" style="font-weight: 600; color: var(--primary); text-decoration: none; font-family: var(--font-mono);">
+                  {{ r.id }}
+                </a>
+              </td>
+              <td>
+                {% if r.is_sample %}
+                <span class="badge badge-sample">Precomputed Demo</span>
+                {% else %}
+                <span class="badge badge-uploaded">Uploaded</span>
+                {% endif %}
+              </td>
+              <td><span class="code-pill">{{ r.target_path }}</span></td>
+              <td>{{ r.actual_runs }} / {{ r.requested_runs }}</td>
+              <td>
+                {% if r.flaky_count > 0 %}
+                <span class="badge badge-flaky">{{ r.flaky_count }} / {{ r.total_tests }} FLAKY</span>
+                {% else %}
+                <span class="badge badge-clean">0 / {{ r.total_tests }} CLEAN</span>
+                {% endif %}
+              </td>
+              <td>{{ r.total_executions }}</td>
+              <td>
+                <a href="/reports/{{ r.id }}" class="btn btn-secondary btn-sm">View Report &rarr;</a>
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+      {% else %}
+      <div class="empty-state">
+        <p style="font-size: 1.05rem; font-weight: 500; color: var(--text); margin-bottom: 0.5rem;">No Diagnostic Reports Found</p>
+        <p style="font-size: 0.875rem;">Upload a FlakyHunter JSON report below or execute tests via CLI:</p>
+        <p style="margin-top: 0.75rem;"><code class="code-pill">flakyhunter run tests/ --runs 15 --output sample_results/demo_report.json</code></p>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Upload Form Card -->
+    <div class="card" id="upload-section">
+      <div class="card-header">
+        <div>
+          <h2>Upload FlakyHunter Report</h2>
+          <p class="card-subtitle">Validated strictly against Report schema v1.0.0. Maximum file size: 5 MB.</p>
+        </div>
+      </div>
+
+      <div class="alert alert-info" style="margin-bottom: 1.25rem;">
+        <div>
+          <strong>Security Guarantee:</strong> Uploaded JSON files are strictly parsed and validated using Pydantic. Uploaded content is <strong>never evaluated, executed, or used to invoke subprocesses</strong>.
+        </div>
+      </div>
+
+      <form id="upload-form" action="/api/upload" method="post" enctype="multipart/form-data">
+        <label class="upload-zone" id="drop-zone" for="file-input">
+          <input type="file" id="file-input" name="file" accept=".json" required>
+          <div style="font-size: 2rem; margin-bottom: 0.5rem; color: #94a3b8;">&uarr;</div>
+          <div class="upload-zone-text">Click to choose a FlakyHunter JSON report, or drag and drop file here</div>
+          <div class="upload-zone-subtext">Accepts .json files up to 5 MB generated by <code>flakyhunter run</code></div>
+          <div id="file-info" class="file-selected-info"></div>
+        </label>
+        
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1.25rem; flex-wrap: wrap; gap: 1rem;">
+          <div style="font-size: 0.8rem; color: var(--text-muted);">
+            Persistence note: Free-tier deployments use ephemeral storage. Reports remain available during the active container session.
+          </div>
+          <button type="submit" id="submit-btn" class="btn">Validate & Upload Report</button>
+        </div>
+      </form>
+    </div>
+
+    <footer>
+      FlakyHunter &mdash; Recruiter-Quality Testing Infrastructure &bull; MIT License &bull; Vikas Kumar Patel
+    </footer>
+  </div>
+
+  <script>
+    const fileInput = document.getElementById('file-input');
+    const dropZone = document.getElementById('drop-zone');
+    const fileInfo = document.getElementById('file-info');
+    const uploadForm = document.getElementById('upload-form');
+    const submitBtn = document.getElementById('submit-btn');
+    const alertBox = document.getElementById('dynamic-alert');
+
+    // Drag & drop handlers
+    ['dragenter', 'dragover'].forEach(name => {
+      dropZone.addEventListener(name, (e) => {
+        e.preventDefault();
+        dropZone.classList.add('dragover');
+      });
+    });
+    ['dragleave', 'drop'].forEach(name => {
+      dropZone.addEventListener(name, (e) => {
+        e.preventDefault();
+        dropZone.classList.remove('dragover');
+      });
+    });
+    dropZone.addEventListener('drop', (e) => {
+      if (e.dataTransfer.files.length) {
+        fileInput.files = e.dataTransfer.files;
+        updateFileInfo();
+      }
+    });
+    fileInput.addEventListener('change', updateFileInfo);
+
+    function updateFileInfo() {
+      if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        fileInfo.textContent = `Selected: ${file.name} (${(file.size / 1024).toFixed(1)} KB)`;
+        fileInfo.style.display = 'block';
+      }
+    }
+
+    // Interactive async submission
+    uploadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!fileInput.files.length) return;
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Validating & Storing...';
+      alertBox.style.display = 'none';
+
+      const formData = new FormData(uploadForm);
+      try {
+        const response = await fetch('/api/upload', {
+          method: 'POST',
+          body: formData,
+          headers: { 'Accept': 'application/json' }
+        });
+
+        const data = await response.json();
+
+        if (response.ok && data.status === 'success') {
+          alertBox.className = 'alert alert-success';
+          alertBox.innerHTML = `
+            <div>
+              <strong>Report Uploaded Successfully!</strong> Verified against schema v1.0.0.
+              Report Identifier: <code>${data.report_id}</code>.
+            </div>
+            <a href="${data.url}" class="btn btn-sm" style="background: #059669; color: white;">View Report &rarr;</a>
+          `;
+          alertBox.style.display = 'flex';
+          fileInput.value = '';
+          fileInfo.style.display = 'none';
+
+          // Redirect to report page after a brief moment so user can see success
+          setTimeout(() => {
+            window.location.href = data.url;
+          }, 1200);
+        } else {
+          alertBox.className = 'alert alert-error';
+          const msg = data.detail || 'Upload failed. File rejected.';
+          alertBox.innerHTML = `<div><strong>Upload Validation Error:</strong> ${msg}</div>`;
+          alertBox.style.display = 'block';
+        }
+      } catch (err) {
+        alertBox.className = 'alert alert-error';
+        alertBox.innerHTML = `<div><strong>Network Error:</strong> Failed to reach server (${err.message}).</div>`;
+        alertBox.style.display = 'block';
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Validate & Upload Report';
+      }
+    });
+  </script>
+</body>
+</html>

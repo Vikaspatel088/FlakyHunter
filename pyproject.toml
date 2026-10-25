@@ -1,0 +1,74 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "flakyhunter"
+version = "0.1.0"
+description = "Detect flaky pytest tests, estimate failure probability, isolate polluters via delta debugging, and generate actionable reports."
+readme = "README.md"
+authors = [{ name = "Vikas Kumar Patel" }]
+license = { text = "MIT" }
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Software Development :: Testing",
+    "Framework :: Pytest",
+]
+dependencies = [
+    "pytest>=8.0.0",
+    "fastapi>=0.110.0",
+    "uvicorn>=0.28.0",
+    "jinja2>=3.1.0",
+    "pydantic>=2.6.0",
+    "python-multipart>=0.0.9",
+]
+
+[project.optional-dependencies]
+dev = [
+    "ruff>=0.3.0",
+    "httpx>=0.27.0",
+    "build>=1.0.0",
+]
+
+[project.scripts]
+flakyhunter = "flakyhunter.cli:main"
+
+[project.entry-points.pytest11]
+flakyhunter = "flakyhunter.plugin"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+flakyhunter = ["templates/*.html"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "W",   # pycodestyle warnings
+    "F",   # pyflakes
+    "I",   # isort
+    "B",   # flake8-bugbear
+    "UP",  # pyupgrade
+]
+ignore = [
+    "E501", # line length handled by formatter
+    "B008", # function call in argument defaults (standard in FastAPI)
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]
+python_functions = ["test_*"]
+addopts = "-ra -q"
